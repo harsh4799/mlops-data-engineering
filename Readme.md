@@ -8,7 +8,7 @@ To get started with this project, follow the steps below:
 
 ### 1. Environment Setup
 
-Create a `.env` file in the project root directory with the following environment variables:
+Create a `.env` file in the project's config directory with the following environment variables:
 
 ```dotenv
 AWS_ACCESS_KEY_ID=your_aws_access_key_id
