@@ -1,0 +1,7 @@
+apache-airflow
+boto3
+pandas
+seaborn
+matplotlib
+pyyaml
+python-dotenv
