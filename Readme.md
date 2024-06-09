@@ -36,8 +36,7 @@ The `perform_eda.py` script performs exploratory data analysis on the extracted 
 
 ### 3. Create Visualizations
 
-The `create_visualizations.py` script generates visualizations based on the EDA results and uploads them to S3.
-
+The `create_visualizations.py` script generates visualizations based on the EDA results to XCom
 ### 4. Load to S3
 
 The `load_to_s3.py` script loads various data files, tables, visualizations, and EDA results to S3.
