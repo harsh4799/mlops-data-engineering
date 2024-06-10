@@ -26,6 +26,8 @@ docker-compose up
 
 ## Components
 
+![Airflow DAG](images/Airflow_DAG.png)
+
 ### 1. Extract Data
 
 The `extract_data.py` script extracts data from an S3 bucket and passes it to the next task.
@@ -37,6 +39,7 @@ The `perform_eda.py` script performs exploratory data analysis on the extracted 
 ### 3. Create Visualizations
 
 The `create_visualizations.py` script generates visualizations based on the EDA results to XCom
+
 ### 4. Load to S3
 
 The `load_to_s3.py` script loads various data files, tables, visualizations, and EDA results to S3.
@@ -45,16 +48,21 @@ The `load_to_s3.py` script loads various data files, tables, visualizations, and
 
 ```
 .
-├── dags/
-│   └── fraud_detection_dag.py
-├── scripts/
-│   ├── extract_data.py
-│   ├── perform_eda.py
-│   ├── create_visualizations.py
-│   └── load_to_s3.py
 ├── config/
 │   └── .env
+|   └── s3_config.yaml
+├── dags/
+│   └── operators/
+│       ├── extract_data_operator.py
+│       ├── perform_eda_operator.py
+│       ├── create_visualizations_operator.py
+│       └── load_to_s3_operator.py
+|   ├── fraud_detection_dag.py
+├── images/
+│   └── Airflow_DAG.png
 ├── Dockerfile
 ├── docker-compose.yaml
+├── requirements.txt
 └── README.md
+
 ```

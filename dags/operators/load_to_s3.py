@@ -8,6 +8,7 @@ from airflow.utils.db import provide_session
 from airflow.models import XCom
 from enum import Enum
 import logging
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,7 @@ def load_to_s3(**kwargs):
     execution_date = ti.execution_date
 
     xcoms = get_all_xcoms(dag_id, execution_date)
+    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
     # Upload all XCom files to S3 based on their category
     for xcom in xcoms:
@@ -67,11 +69,11 @@ def load_to_s3(**kwargs):
         logger.info("Processing ", key, " of category ", category)
 
         if category == xcom_type.VISUALIZATION:
-            s3_client.upload_file(value, s3_bucket, f'visualizations/{os.path.basename(value)}')
+            s3_client.upload_file(value, s3_bucket, f'visualizations/{current_time}/{os.path.basename(value)}')
         elif category == xcom_type.TABLE:
             table_data = pd.read_json(value)
             table_path = f'/tmp/{key}.csv'
             table_data.to_csv(table_path, index=False)
-            s3_client.upload_file(table_path, s3_bucket, f'tables/{os.path.basename(table_path)}')
+            s3_client.upload_file(table_path, s3_bucket, f'tables/{current_time}/{os.path.basename(table_path)}')
         elif category == xcom_type.DATA:
             continue

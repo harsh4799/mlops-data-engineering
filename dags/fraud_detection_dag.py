@@ -47,5 +47,5 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-extract_task >> eda_task >> visualization_task >> load_task
+extract_task >> [eda_task, visualization_task] >> load_task
 
