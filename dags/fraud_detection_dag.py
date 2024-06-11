@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
-from operators import perform_eda,extract_data, create_visualizations, load_to_s3
+from operators import perform_eda,extract_data, create_visualizations, load_to_s3, check_anomalies
 from datetime import timedelta
 
 default_args = {
@@ -41,11 +41,19 @@ visualization_task = PythonOperator(
     dag=dag,
 )
 
+check_anomalies_task = PythonOperator(
+    task_id='check_anomalies',
+    python_callable = check_anomalies,
+    provide_context=True,
+    dag=dag,
+)
+
 load_task = PythonOperator(
     task_id='load_to_s3',
     python_callable=load_to_s3,
     dag=dag,
 )
 
-extract_task >> [eda_task, visualization_task] >> load_task
+extract_task >> check_anomalies_task >> [eda_task, visualization_task] >> load_task
+# extract_task >> [eda_task, visualization_task] >> load_task
 
