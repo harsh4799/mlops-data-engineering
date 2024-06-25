@@ -57,6 +57,7 @@ The `load_to_s3.py` script loads various data files, tables, visualizations, and
 |   └── s3_config.yaml
 ├── dags/
 │   └── operators/
+│       ├── check_anomalies.py
 │       ├── extract_data_operator.py
 │       ├── perform_eda_operator.py
 │       ├── create_visualizations_operator.py
