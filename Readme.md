@@ -32,15 +32,19 @@ docker-compose up
 
 The `extract_data.py` script extracts data from an S3 bucket and passes it to the next task.
 
-### 2. Perform EDA
+### 2. Check Anomalies
+
+The `check_anomalies.py` script analyzes the extracted data for any anomalies outside of the expected data distribution.
+
+### 3. Perform EDA
 
 The `perform_eda.py` script performs exploratory data analysis on the extracted data and pushes the EDA results to XCom.
 
-### 3. Create Visualizations
+### 4. Create Visualizations
 
 The `create_visualizations.py` script generates visualizations based on the EDA results to XCom
 
-### 4. Load to S3
+### 5. Load to S3
 
 The `load_to_s3.py` script loads various data files, tables, visualizations, and EDA results to S3.
 

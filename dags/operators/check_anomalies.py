@@ -3,7 +3,10 @@ import logging
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
 import os
+from email import encoders
+
 from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
@@ -32,8 +35,23 @@ def send_email(anomalies_df):
     msg['To'] = recipient_email
     msg['Subject'] = 'Anomaly Detection Alert'
 
-    body = f"Anomalies have been detected in the credit card transactions:\n\n{anomalies_df.to_string(index=False)}"
+    body = "Anomalies have been detected in the credit card transactions. Please find the attached CSV file for details."
     msg.attach(MIMEText(body, 'plain'))
+
+    # Save the DataFrame to a CSV file
+    csv_filename = "anomalies.csv"
+    anomalies_df.to_csv(csv_filename, index=False)
+
+    # Attach the CSV file
+    with open(csv_filename, "rb") as attachment:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename= {csv_filename}",
+        )
+        msg.attach(part)
 
     try:
         with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
@@ -57,3 +75,7 @@ def check_anomalies(ti):
         logger.info("No anomalies detected.")
         return False
 
+
+
+if __name__=="__main__":
+    send_email(pd.DataFrame.from_dict({"Vibe":["Check"]}))
