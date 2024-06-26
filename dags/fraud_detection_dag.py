@@ -1,7 +1,7 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
-from operators import perform_eda,extract_data, create_visualizations, load_to_s3, check_anomalies
+from operators import perform_eda,extract_data, visualize_categorical_columns, load_to_s3, check_anomalies, visualize_ratio_to_median_purchase_price
 from datetime import timedelta
 
 default_args = {
@@ -9,7 +9,8 @@ default_args = {
     'depends_on_past': False,
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 3,
+    'retry_delay': timedelta(seconds=10),
 }
 
 dag = DAG(
@@ -34,12 +35,20 @@ eda_task = PythonOperator(
     dag=dag,
 )
 
-visualization_task = PythonOperator(
-    task_id='create_visualizations',
-    python_callable=create_visualizations,
+visualize_categorical_columns_task = PythonOperator(
+    task_id='visualize_categorical_columns',
+    python_callable=visualize_categorical_columns,
     provide_context=True,
     dag=dag,
 )
+
+visualize_ratio_to_median_purchase_price_task = PythonOperator(
+    task_id='visualize_ratio_to_median_purchase_price',
+    python_callable=visualize_ratio_to_median_purchase_price,
+    provide_context=True,
+    dag=dag,
+)
+
 
 check_anomalies_task = PythonOperator(
     task_id='check_anomalies',
@@ -54,6 +63,6 @@ load_task = PythonOperator(
     dag=dag,
 )
 
-extract_task >> check_anomalies_task >> [eda_task, visualization_task] >> load_task
+extract_task >> check_anomalies_task >> [eda_task, visualize_categorical_columns_task, visualize_ratio_to_median_purchase_price_task] >> load_task
 # extract_task >> [eda_task, visualization_task] >> load_task
 
