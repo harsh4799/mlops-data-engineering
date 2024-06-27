@@ -50,13 +50,21 @@ visualize_ratio_to_median_purchase_price_task = PythonOperator(
 )
 
 
+visualize_distance_from_last_transaction_task = PythonOperator(
+    task_id='visualize_distance_from_last_transaction',
+    python_callable=visualize_distance_from_last_transaction,
+    provide_context=True,
+    dag=dag,
+)
+
+
+
 visualize_distance_from_home_task = PythonOperator(
     task_id='visualize_distance_from_home',
     python_callable=visualize_distance_from_home,
     provide_context=True,
     dag=dag,
 )
-
 
 check_anomalies_task = PythonOperator(
     task_id='check_anomalies',
