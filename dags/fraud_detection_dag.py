@@ -58,13 +58,6 @@ visualize_distance_from_home_task = PythonOperator(
 )
 
 
-visualize_distance_from_last_transaction_task = PythonOperator(
-    task_id='visualize_distance_from_last_transaction',
-    python_callable=visualize_distance_from_last_transaction,
-    provide_context=True,
-    dag=dag,
-)
-
 check_anomalies_task = PythonOperator(
     task_id='check_anomalies',
     python_callable = check_anomalies,
