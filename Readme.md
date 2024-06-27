@@ -42,7 +42,7 @@ The `perform_eda.py` script performs exploratory data analysis on the extracted 
 
 ### 4. Create Visualizations
 
-The `create_visualizations.py` script generates visualizations based on the EDA results to XCom
+The `visualizations` folder has various scripts that generates visualizations like data distribution, certain ratios across categories, etc. to XCom
 
 ### 5. Load to S3
 
@@ -57,11 +57,16 @@ The `load_to_s3.py` script loads various data files, tables, visualizations, and
 |   └── s3_config.yaml
 ├── dags/
 │   └── operators/
+│       └── visualizations/
+│           └── visualize_categorical_columns.py
+│           └── visualize_class_distribution.py
+│           └── visualize_distance_from_home.py
+│           └── visualize_distance_from_last_transaction.py
+│           └── visualize_ratio_to_median_purchase_price.py
 │       ├── check_anomalies.py
-│       ├── extract_data_operator.py
-│       ├── perform_eda_operator.py
-│       ├── create_visualizations_operator.py
-│       └── load_to_s3_operator.py
+│       ├── extract_data.py
+│       ├── perform_eda.py
+│       └── load_to_s3.py
 |   ├── fraud_detection_dag.py
 ├── images/
 │   └── Airflow_DAG.png
